@@ -6,16 +6,49 @@ build-backend = "setuptools.build_meta"
 name = "anki"
 version = "0.0.1"
 authors = [
-	{ name="Это вы!", email="author@example.com" }
+	{ name = "Речкалов Александр Анатольевич", email = "rechkalov.a.a@ya.ru" }
 ]
-description = "Игра Карты Anki"
+description = "Консольная игра для заучивания слов"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-	"pytest"
+	"requests"
+]
+
+[project.optional-dependencies]
+dev = [
+	"pytest",
+	"mypy",
+	"types-requests",
+	"ruff",
+	"black"
 ]
 
 
 [project.scripts]
 anki = "anki.main:main"
 
+[tool.black]
+target-version = ["py39"]
+line-length = 88
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+# Длину строк задаёт black. В тестах курса длинные русские сообщения
+# и проверки через assert False / импорт ради побочного эффекта.
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["B007", "B011", "B015", "B018", "B904", "F401", "F821", "F841"]
+
+[tool.mypy]
+python_version = "3.9"
+check_untyped_defs = true
+warn_unused_ignores = true
+files = ["src/anki"]
+exclude = ["src/anki/tests/"]
